@@ -4,16 +4,39 @@ on:
   push:
 
 jobs:
-  build:
+  python-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install python3-setuptools
+          python3 -m pip install wheel
+          python3 -m pip install black
+      - name: Run black
+        run: python3 -m black --check ./src/
+
+  md-lint:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Run black
-        run: |
-          sudo apt-get install python3-setuptools
-          python3 -m pip install wheel
-          python3 -m pip install black
-          python3 -m black --check ./src/
+      - name: Run MD lint
+        uses: nosborn/github-action-markdown-cli@v1.1.1
+        with:
+          files: .
+          config_file: .github/rules/md-rules.json
+
+      - name: Validate MD links
+        uses: gaurav-nelson/github-action-markdown-link-check@1.0.2
+        with:
+          use-verbose-mode: yes
