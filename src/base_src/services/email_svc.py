@@ -11,6 +11,16 @@ sys.path.append(
 import config_secret
 
 
+def send_alert():
+    # TODO implement this # pylint: disable=fixme
+    pass
+
+
+def check_inbox():
+    # TODO implement this # pylint: disable=fixme
+    pass
+
+
 def _format_message(subject: str, body: str):
     return "Subject: {}\n\n{}".format(subject, body)
 
@@ -99,6 +109,3 @@ def _rec_email():
         responses.append(_parse_msg(parsedbytes))
 
     return responses
-
-
-print(_rec_email())
