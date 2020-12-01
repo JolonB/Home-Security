@@ -109,3 +109,6 @@ def _rec_email():
         responses.append(_parse_msg(parsedbytes))
 
     return responses
+
+if __name__ == "__main__":
+    _send_email("this is a test")
