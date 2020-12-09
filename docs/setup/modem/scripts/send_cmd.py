@@ -78,7 +78,7 @@ def reset():
 
 def write(cmd: str):
     print(f"Sending {cmd}")
-    if ser.isOpen() == False:
+    if not ser.isOpen():
         ser.open()
     compose = ""
     compose = str(cmd) + "\r"
@@ -87,7 +87,7 @@ def write(cmd: str):
 
 
 def read():
-    if ser.isOpen() == False:
+    if not ser.isOpen():
         ser.open()
     response = ""
     while ser.inWaiting():
