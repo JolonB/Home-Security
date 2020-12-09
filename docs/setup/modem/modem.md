@@ -25,7 +25,7 @@
 
 ### SIM Card Setup
 
-1. Create and log in to an account on [sixfab connect](connect.sixfab.com). Note: the user name cannot contain any capital letters.
+1. Create and log in to an account on [sixfab connect](https://connect.sixfab.com). Note: the user name cannot contain any capital letters.
 2. Go to SIM > Register a SIM.
 3. Enter the SIM's ICCID. This number can be found below the barcode on the SIM packaging or on two lines on the back of the SIM itself.
 4. Add payment details in Billing > Payment Details > Add a Payment Method. Sixfab will need to charge US$10 to your account which will be added to your balance.
