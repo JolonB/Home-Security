@@ -53,10 +53,11 @@ def get_on_status():
 
 
 def wake_sleep(on: bool):
+    print(get_on_status())
     if get_on_status() != on:
         GPIO.output(BG96_POWERKEY, 1)
         if on:
-            while get_on_status() != on:
+            while not get_on_status():
                 ...
         else:
             time.sleep(1)
@@ -99,7 +100,8 @@ if __name__ == "__main__":
     setupGPIO()
 
     if args.pon:
-        power(on=True)
+        wake_sleep(on=True)
+        exit(0)
 
     write(args.command)
 
@@ -108,6 +110,6 @@ if __name__ == "__main__":
     print(read())
 
     if args.poff:
-        power(on=False)
+        wake_sleep(on=False)
 
     GPIO.cleanup()
