@@ -30,8 +30,24 @@
 3. Enter the SIM's ICCID. This number can be found below the barcode on the SIM packaging or on two lines on the back of the SIM itself.
 4. Add payment details in Billing > Payment Details > Add a Payment Method. Sixfab will need to charge US$10 to your account which will be added to your balance.
 
+1. Go to the [Twilio Buy a Number page](https://www.twilio.com/console/phone-numbers/search). You may need to create an account if this hasn't been done yet.
+
 ### Driver Setup
 
 1. Power on the HAT by pressing the PWRKEY button. The STAT LED will light up when the board is powered.
 2. Run `modem_setup.sh`. This will install everything needed and move you to the appropriate directory.
 3. Run `python3 configureCATM1.py`. Look at the response to the AT+COPS? command. If it is +COPS: 0, then you should retry the script or run `python configureGPRS.py` instead. A good response from AT+COPS? will include the network name. It is better to use CATM1, so try different locations for better signal if you can.
+
+### Connecting to Modem from PC
+
+If you want to connect to the modem from a PC, you need to:
+
+1. Connect the 5V and Vbus jumpers to allow power through the USB.
+1. Connect the USB cable to your computer (or to the Raspberry Pi).
+1. Press the `PWRKEY` button and wait for the modem to boot.
+1. Three new serial connections will appear. Connect to the Quectel USB AT Port (this is probably the lowest numbered port) with `picocom -b 115200 /dev/ttyX` where `X` is the port number.
+1. Type `ATE1` and press enter to turn on command echo.
+1. Send any commands that you need to send.
+1. To exit picocom, press `Ctrl+A` `Ctrl+X`.
+
+You can also connect to the modem using QNavigator from Quectel.
