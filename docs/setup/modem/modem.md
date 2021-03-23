@@ -51,3 +51,24 @@ If you want to connect to the modem from a PC, you need to:
 1. To exit picocom, press `Ctrl+A` `Ctrl+X`.
 
 You can also connect to the modem using QNavigator from Quectel.
+
+
+### Testing SMS Capabilities
+
+If you want to use SMS and you are developing this system, you may want to manually test your SIM card (at least until I make a script to automate it).
+You must know the number for the SIM card, which should be given to you when the SIM card is set up.
+
+You can do test this by connecting to the modem in whatever way you like and:
+
+1. Send `AT+COPS?` to verify you are connected to the network.
+1. Send `AT+CMGF=1` to set the message format to text, or `AT+CMGF=0` to set it to PDU (this will be unreadable).
+1. Send `AT+CMGL="ALL"` (text) or `AT+CMGL=4` (PDU) to view all of the messages.
+
+<!-- TODO find how to send SMS maybe even try using skinny sim -->
+
+### Shutdown
+
+The modem can be shutdown with `AT+QPOWD`.
+The module will output `POWERED DOWN` to indicate that the shutdown procedure has finished.
+It is best to wait 1 second after the output to remove power.
+If no signal is received after 65 seconds, the power can be disconnected.
