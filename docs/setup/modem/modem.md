@@ -25,12 +25,48 @@
 
 ### SIM Card Setup
 
+#### Twilio/Sixfab
+
+##### Twilio SIM Setup
+
 1. Create and log in to an account on [sixfab connect](https://connect.sixfab.com). Note: the user name cannot contain any capital letters.
 1. Go to SIM > Register a SIM.
 1. Enter the SIM's ICCID. This number can be found below the barcode on the SIM packaging or on two lines on the back of the SIM itself.
 1. Add payment details in Billing > Payment Details > Add a Payment Method. Sixfab will need to charge US$10 to your account which will be added to your balance.
 
+##### Twilio SMS Setup
+
 1. Go to the [Twilio Buy a Number page](https://www.twilio.com/console/phone-numbers/search). You may need to create an account if this hasn't been done yet.
+
+#### Hologram
+
+##### Hologram SIM Setup
+
+1. Go to the [Hologram Start page](https://dashboard.hologram.io/start). Press "Get Started" and set up your account.
+1. Activate your SIM card by entering the code on the back of the card.
+1. Activate the SIM card. If using a pilot SIM, you do not need to make any payments.
+1. Configure the APN on the device by setting it to `hologram`. The easiest way to do this is by connecting via a PC.
+1. Make sure to start the SIM card by pressing the "Resume" button.
+
+##### Hologram SMS Setup
+
+1. Go to *Devices* on the Hologram dashboard and press *Data Plan*.
+1. Scroll to the bottom and press *Purchase Phone Number*.
+1. Select your country and purchase a phone number.
+
+#### Local SIM Card (Vodafone NZ)
+
+##### Local SIM Setup
+
+1. Purchase a SIM card compatible with NB-IoT (in New Zealand, this is Vodafone).
+1. Insert the SIM card into your phone and follow the instructions on the packaging to get it set up.
+1. Make a note of the phone number assigned to it.
+1. Insert the SIM into the modem. The APN should set itself.
+
+##### Local SMS Setup
+
+This should already be done by default.
+If not, the instructions will vary between providers.
 
 ### Driver Setup
 
@@ -62,8 +98,6 @@ You can do test this by connecting to the modem in whatever way you like and:
 1. Send `AT+COPS?` to verify you are connected to the network.
 1. Send `AT+CMGF=1` to set the message format to text, or `AT+CMGF=0` to set it to PDU (this will be unreadable).
 1. Send `AT+CMGL="ALL"` (text) or `AT+CMGL=4` (PDU) to view all of the messages.
-
-<!-- TODO find how to send SMS maybe even try using skinny sim -->
 
 ### Shutdown
 
