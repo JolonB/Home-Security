@@ -1,0 +1,33 @@
+menu "Pin Setup"
+
+    config FLASH_LED
+        int "Flash GPIO number"
+        range 0 34
+        default 4
+        depends on FLASH_ENABLE
+        help
+            GPIO number (IOxx) to blink on and off.
+
+            Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used to blink.
+
+            GPIOs 35-39 are input-only so cannot be used as outputs.
+
+endmenu
+
+menu "Features"
+
+    config FLASH_ENABLE
+        bool "Enable flash"
+        default "n"
+        help
+            If the microcontroller supports (and you want) the camera to flash when pictures are taken, set this to "y".
+    
+    config FLASH_ONLY_WHEN_DARK
+        bool "Only flash when dark"
+        depends on FLASH_ENABLE
+        default "y"
+        help
+            If the camera flash is enabled, this will only allow it to flash when the pixels detected by the camera are dark.
+            This may result in a slightly more costly photo operation, as it will need to read an initial image and calculate the brightness.
+
+endmenu

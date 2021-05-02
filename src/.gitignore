@@ -1,1 +1,6 @@
+# Config files
 *_secret.*
+
+# IDF build files
+build/
+sdkconfig
