@@ -40,3 +40,23 @@ jobs:
         uses: gaurav-nelson/github-action-markdown-link-check@1.0.2
         with:
           use-verbose-mode: yes
+
+  cpplinter:
+    name: cpp linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+      - name: cpplint
+        run: |
+          pip install cpplint
+          cpplint --recursive --root=./src/node_src --filter=-build/include_subdir,-legal/copyright --exclude=./src/node_src/build ./src/node_src/
+  cppchecker:
+    name: cpp code checking
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: cppcheck
+        run: |
+          sudo apt-get install cppcheck
+          cppcheck --enable=all --inline-suppr --suppress=missingInclude src/node_src/ -i src/node_src/build/ --error-exitcode=1
