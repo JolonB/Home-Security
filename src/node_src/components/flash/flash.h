@@ -1,0 +1,4 @@
+#ifndef COMPONENTS_FLASH_FLASH_H_
+#define COMPONENTS_FLASH_FLASH_H_
+// includes go here
+#endif  // COMPONENTS_FLASH_FLASH_H_
