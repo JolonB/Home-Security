@@ -16,7 +16,6 @@
 
 static const char* TAG = "Main";
 
-// cppcheck-suppress unusedFunction
 void app_main(void) {
     int i = 0;
     while (true) {
