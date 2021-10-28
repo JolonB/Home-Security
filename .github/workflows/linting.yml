@@ -59,4 +59,4 @@ jobs:
       - name: cppcheck
         run: |
           sudo apt-get install cppcheck
-          cppcheck --enable=all --inline-suppr --suppress=missingInclude src/node_src/ -i src/node_src/build/ --error-exitcode=1
+          cppcheck --enable=all --inline-suppr --suppress=missingInclude --suppress=unusedFunction src/node_src/ -i src/node_src/build/ --error-exitcode=1
