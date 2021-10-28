@@ -10,4 +10,11 @@ An expandable home security system that begins recording images when motion is d
 ## Getting Started
 
 Download this repo with `git clone --recurse-submodules https://github.com/JolonB/Home-Security.git`.  
-If you forget to add the `--recurse-submodules` step, you can pull them with `git submodule update --recusrive`.
+If you forget to add the `--recurse-submodules` step, you can pull them with:
+
+```shell
+git submodule init
+git submodule update --recursive
+```
+
+The submodules that are being downloaded can be found in [the .gitmodules file](.gitmodules).
