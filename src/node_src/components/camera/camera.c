@@ -80,7 +80,7 @@ esp_err_t init_camera() {
     return ESP_OK;
 }
 
-camera_fb_t get_picture() {
+camera_fb_t* get_picture() {
     /**
      * Take a picture
      * 
