@@ -14,10 +14,13 @@
 #include "esp_spi_flash.h"
 #include "esp_log.h"
 
+#include "image_saver.h"
+
 static const char* TAG = "Main";
 
 void app_main(void) {
     int i = 0;
+    mount_sdcard();
     while (true) {
         printf("Hello world!\n");
         ESP_LOGW(TAG, "This is some logging info with an arg %i", i);
