@@ -3,6 +3,7 @@
 
 #include "sdmmc_cmd.h"  // this may not be needed
 #include "driver/sdspi_host.h"
+#include "esp_camera.h"
 
 #define SD_DATA2 GPIO_NUM_12
 #define SD_DATA3 GPIO_NUM_13  // CD
@@ -16,7 +17,10 @@
 #define SD_SCLK GPIO_NUM_14
 #define SD_CS GPIO_NUM_13
 
-#endif  // COMPONENTS_IMAGESAVER_IMAGESAVER_H_
+void saver_test(void);
+void image_saver_mount_sdcard(void);
+void image_saver_unmount_sdcard(void);
+int write_test_sdcard(void);
+bool image_saver_write_image(camera_fb_t *fb);
 
-void test();
-void mount_sdcard(void);
+#endif  // COMPONENTS_IMAGESAVER_IMAGESAVER_H_

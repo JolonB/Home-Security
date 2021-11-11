@@ -1,6 +1,8 @@
 #ifndef COMPONENTS_CAMERA_CAMERA_H_
 #define COMPONENTS_CAMERA_CAMERA_H_
 
+#include "esp_camera.h"
+
 #define CAM_PIN_PWDN GPIO_NUM_32
 #define CAM_PIN_RESET GPIO_NUM_NC
 #define CAM_PIN_XCLK GPIO_NUM_0
@@ -18,5 +20,9 @@
 #define CAM_PIN_VSYNC GPIO_NUM_25
 #define CAM_PIN_HREF GPIO_NUM_23
 #define CAM_PIN_PCLK GPIO_NUM_22
+
+esp_err_t camera_init_camera();
+camera_fb_t* camera_get_picture();
+void camera_free_fb(camera_fb_t*);
 
 #endif  // COMPONENTS_CAMERA_CAMERA_H_

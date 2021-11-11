@@ -23,7 +23,7 @@ const char *TAG = "image_saver";
 const char *MOUNT_POINT = "/sdcard";
 static sdmmc_card_t* mounted_card;
 
-void test() {
+void saver_test(void) {
     sdspi_slot_config_t slot_config = SDSPI_SLOT_CONFIG_DEFAULT();
     esp_err_t err = sdspi_host_init();
     if (err != ESP_OK) {
@@ -32,7 +32,7 @@ void test() {
     }
 }
 
-void mount_sdcard(void) {
+void image_saver_mount_sdcard(void) {
     sdmmc_card_t* card;
 
     esp_vfs_fat_sdmmc_mount_config_t mount_config = {
@@ -69,4 +69,56 @@ void mount_sdcard(void) {
         ESP_ERROR_CHECK(ret);
     }
     sdmmc_card_print_info(stdout, card);
+}
+
+void image_saver_unmount_sdcard(void) {
+    esp_vfs_fat_sdmmc_unmount();
+}
+
+int write_test_sdcard(void) {
+    FILE* f = fopen("/sdcard/test.txt", "w");
+    if (f == NULL) {
+        ESP_LOGE(TAG, "Failed to open file for writing");
+        return false;
+    }
+    fprintf(f, "Hello world!\n");
+    fclose(f);
+    return true;
+}
+
+bool image_saver_write_image(camera_fb_t *fb) {
+    if (mounted_card == NULL) {
+        ESP_LOGE(TAG, "Card not mounted");
+        return false;
+    }
+    FILE* f = fopen("/sdcard/test.jpg", "w");
+    if (f == NULL) {
+        ESP_LOGE(TAG, "Failed to open file for writing");
+        return false;
+    }
+    fwrite(fb->buf, 1, fb->len, f);
+    ESP_LOGI(TAG, "Wrote image to /sdcard/test.jpg");
+    fclose(f);
+    return true;
+}
+
+char* image_saver_read_directory(char* directory_path) {
+    if (mounted_card == NULL) {
+        ESP_LOGE(TAG, "Card not mounted");
+        return NULL;
+    }
+    DIR* dir = opendir(directory_path);
+    if (dir == NULL) {
+        ESP_LOGE(TAG, "Failed to open directory");
+        return NULL;
+    }
+    struct dirent* entry;
+    char* result = malloc(sizeof(char) * 1024);
+    strcpy(result, "");
+    while ((entry = readdir(dir)) != NULL) {
+        strcat(result, entry->d_name);
+        strcat(result, "\n");
+    }
+    closedir(dir);
+    return result;
 }

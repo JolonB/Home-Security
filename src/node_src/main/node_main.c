@@ -15,16 +15,22 @@
 #include "esp_log.h"
 
 #include "image_saver.h"
+#include "camera.h"
 
 static const char* TAG = "Main";
 
 void app_main(void) {
     int i = 0;
-    mount_sdcard();
-    while (true) {
-        printf("Hello world!\n");
-        ESP_LOGW(TAG, "This is some logging info with an arg %i", i);
-        vTaskDelay(10000 / portTICK_PERIOD_MS);
-        i++;
-    }
+    image_saver_mount_sdcard();
+    camera_init_camera();
+    camera_fb_t* image = camera_get_picture();
+    image_saver_write_image(image);
+    camera_free_fb(image);
+    image_saver_unmount_sdcard();
+    // while (true) {
+    //     printf("Hello world!\n");
+    //     ESP_LOGW(TAG, "This is some logging info with an arg %i", i);
+    //     vTaskDelay(10000 / portTICK_PERIOD_MS);
+    //     i++;
+    // }
 }

@@ -7,7 +7,6 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#include "esp_camera.h"
 #include "camera.h"
 
 static const char *TAG = "example:take_picture";
@@ -36,7 +35,7 @@ static camera_config_t camera_config = {
     .ledc_timer = LEDC_TIMER_0,
     .ledc_channel = LEDC_CHANNEL_0,
 
-    .pixel_format = PIXFORMAT_RGB565,  // YUV422,GRAYSCALE,RGB565,JPEG
+    .pixel_format = PIXFORMAT_JPEG,  // YUV422,GRAYSCALE,RGB565,JPEG
     .frame_size = FRAMESIZE_QVGA,  // QQVGA-UXGA Dont go above QVGA unless JPEG
 
     .jpeg_quality = 12,  // 0-63 lower number means higher quality
@@ -44,7 +43,7 @@ static camera_config_t camera_config = {
     .grab_mode = CAMERA_GRAB_WHEN_EMPTY,
 };
 
-esp_err_t init_camera() {
+esp_err_t camera_init_camera() {
     /**
      * Initialize the camera
      * 
@@ -62,7 +61,7 @@ esp_err_t init_camera() {
     return ESP_OK;
 }
 
-camera_fb_t* get_picture() {
+camera_fb_t* camera_get_picture() {
     /**
      * Take a picture
      * 
@@ -76,7 +75,7 @@ camera_fb_t* get_picture() {
     return pic;
 }
 
-void clear_picture(camera_fb_t *pic) {
+void camera_free_fb(camera_fb_t *pic) {
     /**
      * Free the memory allocated for the picture.
      * 
