@@ -21,8 +21,14 @@
 #define CAM_PIN_HREF GPIO_NUM_23
 #define CAM_PIN_PCLK GPIO_NUM_22
 
-esp_err_t camera_init_camera();
-camera_fb_t* camera_get_picture();
-void camera_free_fb(camera_fb_t*);
+struct image {
+  uint8_t *buf;
+  size_t len;
+};
+
+esp_err_t camera_init_camera(void);
+esp_err_t camera_expose_camera(void);
+size_t camera_get_picture(uint8_t**);
+esp_err_t camera_deinit_camera(void);
 
 #endif  // COMPONENTS_CAMERA_CAMERA_H_

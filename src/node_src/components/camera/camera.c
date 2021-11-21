@@ -10,6 +10,7 @@
 #include "camera.h"
 
 static const char *TAG = "example:take_picture";
+bool camera_initialised = false;
 
 static camera_config_t camera_config = {
     .pin_pwdn = CAM_PIN_PWDN,
@@ -36,75 +37,114 @@ static camera_config_t camera_config = {
     .ledc_channel = LEDC_CHANNEL_0,
 
     .pixel_format = PIXFORMAT_JPEG,  // YUV422,GRAYSCALE,RGB565,JPEG
-    .frame_size = FRAMESIZE_QVGA,  // QQVGA-UXGA Dont go above QVGA unless JPEG
+    .frame_size = FRAMESIZE_SXGA,  // QQVGA-UXGA Dont go above QVGA unless JPEG
 
-    .jpeg_quality = 12,  // 0-63 lower number means higher quality
+    .jpeg_quality = 6,  // 0-63 lower number means higher quality
     .fb_count = 1,  // if more than one, runs in continuous mode (JPEG only)
     .grab_mode = CAMERA_GRAB_WHEN_EMPTY,
 };
 
+/**
+ * Initialize the camera
+ * 
+ * This must be done before you attempt to call get_picture or
+ * clear_picture.
+ * 
+ * @return ESP_OK if successful, ESP_FAIL otherwise
+ */
 esp_err_t camera_init_camera() {
-    /**
-     * Initialize the camera
-     * 
-     * This must be done before you attempt to call get_picture or
-     * clear_picture.
-     */
+    if (camera_initialised) {
+        ESP_LOGW(TAG, "Camera already initialised");
+        return ESP_OK;
+    }
+
     // Initialize the camera
-    ESP_LOGI(TAG, "Initializing camera");
+    ESP_LOGI(TAG, "Initialising camera");
     esp_err_t err = esp_camera_init(&camera_config);
     if (err != ESP_OK) {
-        ESP_LOGE(TAG, "Camera Init Failed");
+        ESP_LOGE(TAG, "Camera init failed");
         return err;
     }
+
+    camera_initialised = true;
 
     return ESP_OK;
 }
 
-camera_fb_t* camera_get_picture() {
-    /**
-     * Take a picture
-     * 
-     * The camera will take a picture and return a pointer to the frame buffer.
-     * The frame buffer contains fields for the image data (buf), the size of
-     * the image (len, width, height), the pixel data format (format), and the
-     * timestamp since boot (timestamp).
-     */
+esp_err_t camera_expose_camera(void) {
+    // TODO(jolonb): should try a different approach to check the brightness of
+    // image
+    // Could try reading image in different format which provides raw pixel
+    // values and then checking the brightness of the image
+    int i = 0;
+    uint8_t *dummy_buffer = NULL;
+
+    // Check that camera has been initialised
+    if (!camera_initialised) {
+        ESP_LOGW(TAG, "Camera not initialised. Initialise the camera before"
+                    " trying to expose it");
+        return ESP_FAIL;
+    }
+
+    // Expose the camera
+    ESP_LOGI(TAG, "Exposing camera");
+    // It looks like we need to take 5 pictures with 1 sec delay to get the
+    // right exposure
+    while (i < 5) {
+        camera_get_picture(&dummy_buffer);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        i++;
+    }
+    free(dummy_buffer);
+
+    return ESP_OK;
+}
+
+/**
+ * Take a picture and save it to the provided data buffer.
+ * 
+ * @param data_buffer The buffer to save the picture to.
+ * 
+ * @return The length of the image.
+ */
+size_t camera_get_picture(uint8_t **data) {
+    // Check that camera has been initialised
+    if (!camera_initialised) {
+        ESP_LOGW(TAG, "Camera not initialised. Initialise the camera before"
+                    " trying to use get images");
+        return 0;
+    }
+
     ESP_LOGI(TAG, "Taking picture...");
+    // Get the picture and copy it to the data buffer
     camera_fb_t *pic = esp_camera_fb_get();
-    return pic;
-}
-
-void camera_free_fb(camera_fb_t *pic) {
-    /**
-     * Free the memory allocated for the picture.
-     * 
-     * This function should only be called after the picture has been taken.
-     * If taken before, there will be no frame buffer to provide as the `pic`
-     * argument.
-     * 
-     * pic: The picture taken.
-     */
-    ESP_LOGI(TAG, "Freeing picture...");
+    *data = (uint8_t*) malloc(sizeof(uint8_t) * pic->len);
+    memcpy(*data, pic->buf, pic->len);
+    // Return the buffer
     esp_camera_fb_return(pic);
+    // Return the length of the image to the caller
+    return pic->len;
 }
 
-// This bit of code should be put somewhere in the main loop.
-// void app_main()
-// {
-//     if(ESP_OK != init_camera()) {
-//         return;
-//     }
+/**
+ * Deinitialize the camera
+ * 
+ * This must be done after you are done with the camera.
+ * 
+ * @return ESP_OK if successful, ESP_FAIL otherwise.
+ */
+esp_err_t camera_deinit_camera() {
+    if (!camera_initialised) {
+        ESP_LOGW(TAG, "Camera not initialised. Trying to deinitialise anyway");
+    }
 
-//     while (1)
-//     {
-//         ESP_LOGI(TAG, "Taking picture...");
-//         camera_fb_t *pic = esp_camera_fb_get();
+    ESP_LOGI(TAG, "Deinitialising camera");
+    esp_err_t err = esp_camera_deinit();
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "Camera deinit failed");
+        return err;
+    }
 
-//         // use pic->buf to access the image
-//         ESP_LOGI(TAG, "Picture taken! Its size was: %zu bytes", pic->len);
-//         esp_camera_fb_return(pic);
-
-//         vTaskDelay(5000 / portTICK_RATE_MS);
-//     }
-// }
+    camera_initialised = false;
+    return ESP_OK;
+}
