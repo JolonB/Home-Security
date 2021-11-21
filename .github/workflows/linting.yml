@@ -50,7 +50,7 @@ jobs:
       - name: cpplint
         run: |
           pip install cpplint
-          cpplint --recursive --root=./src/node_src --filter=-build/include_subdir,-legal/copyright,-readability/casting,-readability/multiline_string --exclude=./src/node_src/build ./src/node_src/
+          cpplint --recursive --root=./src/node_src --filter=-build/include_subdir,-legal/copyright,-readability/casting,-readability/multiline_string,-runtime/printf --exclude=./src/node_src/build ./src/node_src/
   cppchecker:
     name: cpp code checking
     runs-on: ubuntu-latest
