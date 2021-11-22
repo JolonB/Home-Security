@@ -20,5 +20,6 @@
 void file_manage_mount_sdcard(void);
 void file_manage_unmount_sdcard(void);
 bool file_manage_write_image(uint8_t*, size_t, const char*);
+void file_manager_explorer(void);
 
 #endif  // COMPONENTS_FILE_MANAGE_FILE_MANAGE_H_

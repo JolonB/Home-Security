@@ -1,3 +1,4 @@
-idf_component_register(SRCS "file_manage.c"
-                    INCLUDE_DIRS "."
-                    REQUIRES sdmmc fatfs esp32-camera)
+idf_component_register(SRCS "file_manage.c" "explorer.c"
+                    INCLUDE_DIRS "./include"
+                    REQUIRES sdmmc fatfs esp32-camera
+                    PRIV_REQUIRES console)

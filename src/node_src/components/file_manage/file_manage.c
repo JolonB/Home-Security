@@ -6,7 +6,12 @@
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
 #include "driver/sdmmc_defs.h"
-#include "dirent.h"
+
+#ifdef CONFIG_FILE_MANAGE_ENABLE_EXPLORER
+#include "explorer.h"
+#endif
+
+#include "esp_console.h"
 
 /**
  * DATA2 - GPIO12
@@ -110,23 +115,9 @@ bool file_manage_write_image(
     return true;
 }
 
-char* file_manage_read_directory(char* directory_path) {
-    if (mounted_card == NULL) {
-        ESP_LOGE(TAG, "Card not mounted");
-        return NULL;
-    }
-    DIR* dir = opendir(directory_path);
-    if (dir == NULL) {
-        ESP_LOGE(TAG, "Failed to open directory");
-        return NULL;
-    }
-    struct dirent* entry;
-    char* result = malloc(sizeof(char) * 1024);
-    strcpy(result, "");
-    while ((entry = readdir(dir)) != NULL) {
-        strcat(result, entry->d_name);
-        strcat(result, "\n");
-    }
-    closedir(dir);
-    return result;
+void file_manager_explorer(void) {
+    #ifdef CONFIG_FILE_MANAGE_ENABLE_EXPLORER
+    file_explorer_init(mounted_card);
+    file_explorer_run();
+    #endif
 }

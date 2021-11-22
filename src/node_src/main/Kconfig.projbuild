@@ -1,0 +1,5 @@
+menu "Home Security"
+    rsource "../components/file_manage/Kconfig"
+    rsource "../components/flash/Kconfig"
+    rsource "../components/esp32-camera/Kconfig"
+endmenu
