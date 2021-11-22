@@ -1,0 +1,9 @@
+menu "File Manager"
+    config FILE_MANAGE_ENABLE_EXPLORER
+        bool "Enable File Explorer"
+        default n
+        help
+            Enable this option to enable the file explorer which can be used during testing.
+            Disable this option when creating the final firmware as it is not needed.
+
+endmenu

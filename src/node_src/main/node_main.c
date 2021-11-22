@@ -1,26 +1,27 @@
-/* Hello World Example
 
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
-*/
-#include <stdio.h>
-#include "sdkconfig.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_system.h"
-#include "esp_spi_flash.h"
+// #include <stdio.h>
+// #include "sdkconfig.h"
+// #include "freertos/FreeRTOS.h"
+// #include "freertos/task.h"
+// #include "esp_system.h"
+// #include "esp_spi_flash.h"
 #include "esp_log.h"
 
 #include "file_manage.h"
-#include "camera.h"
-#include "time.h"
+// #include "camera.h"
+// #include "time.h"
+
+#include "esp_console.h"
 
 static const char* TAG = "main";
 
+
 void app_main(void) {
+
+
+    file_manager_explorer();
+    // exit(0);
+    /*
     uint8_t *image_data = NULL;
     size_t buffer_len;
 
@@ -53,4 +54,7 @@ void app_main(void) {
     free(image_data);
     file_manage_unmount_sdcard();
     camera_deinit_camera();
+
+    file_manager_explorer();
+    */
 }

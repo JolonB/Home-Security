@@ -1,4 +1,4 @@
-menu "Home Security"
+menu "Flash"
     menu "Pin Setup"
 
         config FLASH_LED
