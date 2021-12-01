@@ -10,17 +10,16 @@ static int file_explorer_ls(int, char**);
 static int file_explorer_cd(int, char**);
 static int file_explorer_pwd(int, char**);
 static int file_explorer_mkdir(int, char**);
-static int file_explorer_rmdir(int, char**);
 static int file_explorer_rm(int, char**);
 static int file_explorer_touch(int, char**);
 static int file_explorer_cat(int, char**);
 static int file_explorer_copy(int, char**);
 static int file_explorer_move(int, char**);
-static int file_explorer_rename(int, char**);
+static int file_explorer_stat(int, char**) 
 
 
 static struct {
-    struct arg_str *file;
+    struct arg_str *directory;
     struct arg_end *end;
 } file_explorer_console_ls_args;
 
@@ -39,10 +38,40 @@ static struct {
     struct arg_end *end;
 } file_explorer_console_mkdir_args;
 
+static struct {
+    struct arg_str *file;
+    struct arg_end *end;
+} file_explorer_console_rm_args;
 
+static struct {
+    struct arg_str *file;
+    struct arg_end *end;
+} file_explorer_console_touch_args;
+
+static struct {
+    struct arg_str *file;
+    struct arg_end *end;
+} file_explorer_console_cat_args;
+
+static struct {
+    struct arg_str *src;
+    struct arg_str *dest;
+    struct arg_end *end;
+} file_explorer_console_copy_args;
+
+static struct {
+    struct arg_str *src;
+    struct arg_str *dest;
+    struct arg_end *end;
+} file_explorer_console_move_args;
+
+static struct {
+    struct arg_str *file;
+    struct arg_end *end;
+} file_explorer_console_stat_args;
 
 static void file_explorer_console_init() {
-    file_explorer_console_ls_args.file = arg_str0(NULL, NULL, "<file>", "File to read");
+    file_explorer_console_ls_args.directory = arg_str0(NULL, NULL, "<file>", "Directory to read");
     file_explorer_console_ls_args.end = arg_end(2);
 
     file_explorer_console_cd_args.directory = arg_str1(NULL, NULL, "<directory>", "Directory to change to");
@@ -51,7 +80,17 @@ static void file_explorer_console_init() {
     file_explorer_console_pwd_args.end = arg_end(1);
 
     file_explorer_console_mkdir_args.directory = arg_str1(NULL, NULL, "<directory>", "Directory to create");
-    file_explorer_console_mkdir_args.recursive = arg_lit0(NULL, "recursive", "Create directories recursively");
+    file_explorer_console_mkdir_args.recursive = arg_lit0("p", "parents", "Create directories recursively");
+    file_explorer_console_mkdir_args.end = arg_end(2);
+
+    file_explorer_console_rm_args.file = arg_str1(NULL, NULL, "<file>", "File to remove");
+    file_explorer_console_rm_args.end = arg_end(2);
+
+    file_explorer_console_touch_args.file = arg_str1(NULL, NULL, "<file>", "File to create");
+    file_explorer_console_touch_args.end = arg_end(2);
+
+    file_explorer_console_cat_args.file = arg_str1(NULL, NULL, "<file>", "File to read");
+    file_explorer_console_cat_args.end = arg_end(2);
 }
 
 
@@ -82,13 +121,7 @@ const esp_console_cmd_t file_explorer_console_cmds[] = {
         .help = "make directories",
         .hint = NULL,
         .func = &file_explorer_mkdir,
-        // .argtable = &file_explorer_console_mkdir_args,
-    },
-    {
-        .command = "rmdir",
-        .help = "remove empty directories",
-        .hint = NULL,
-        .func = &file_explorer_rmdir,
+        .argtable = &file_explorer_console_mkdir_args,
     },
     {
         .command = "rm",
@@ -121,10 +154,10 @@ const esp_console_cmd_t file_explorer_console_cmds[] = {
         .func = &file_explorer_move,
     },
     {
-        .command = "rename",
-        .help = "rename files",
+        .command = "stat",
+        .help = "get file information",
         .hint = NULL,
-        .func = &file_explorer_rename,
+        .func = &file_explorer_stat,
     },
 };
 
