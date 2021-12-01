@@ -1,5 +1,5 @@
-#ifndef COMPONENTS_FILE_MANAGE_FILE_MANAGE_H_
-#define COMPONENTS_FILE_MANAGE_FILE_MANAGE_H_
+#ifndef COMPONENTS_FILE_MANAGE_INCLUDE_FILE_MANAGE_H_
+#define COMPONENTS_FILE_MANAGE_INCLUDE_FILE_MANAGE_H_
 
 #include "sdmmc_cmd.h"  // this may not be needed
 #include "driver/sdspi_host.h"
@@ -22,4 +22,4 @@ void file_manage_unmount_sdcard(void);
 bool file_manage_write_image(uint8_t*, size_t, const char*);
 void file_manager_explorer(void);
 
-#endif  // COMPONENTS_FILE_MANAGE_FILE_MANAGE_H_
+#endif  // COMPONENTS_FILE_MANAGE_INCLUDE_FILE_MANAGE_H_
