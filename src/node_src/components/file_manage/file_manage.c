@@ -65,12 +65,12 @@ void file_manage_mount_sdcard(void) {
 
     if (ret != ESP_OK) {
         if (ret == ESP_FAIL) {
-            ESP_LOGE(TAG, "Failed to mount filesystem. "
-                "If you want the card to be formatted, set the"
+            ESP_LOGE(TAG, "Failed to mount filesystem."
+                " If you want the card to be formatted, set the"
                 " EXAMPLE_FORMAT_IF_MOUNT_FAILED menuconfig option.");
         } else {
-            ESP_LOGE(TAG, "Failed to initialize the card (%s). "
-                "Make sure SD card lines have pull-up resistors in place.",
+            ESP_LOGE(TAG, "Failed to initialize the card (%s)."
+                " Make sure SD card lines have pull-up resistors in place.",
                 esp_err_to_name(ret));
         }
         ESP_ERROR_CHECK(ret);
@@ -82,23 +82,15 @@ void file_manage_unmount_sdcard(void) {
     esp_vfs_fat_sdmmc_unmount();
 }
 
-// int write_test_sdcard(void) {
-//     FILE* f = fopen("/sdcard/test.txt", "w");
-//     if (f == NULL) {
-//         ESP_LOGE(TAG, "Failed to open file for writing");
-//         return false;
-//     }
-//     fprintf(f, "Hello world!\n");
-//     fclose(f);
-//     return true;
-// }
-
 bool file_manage_write_image(
     uint8_t *img_buffer,
     size_t buffer_size,
     const char *filename) {
 
-    char filepath[64] = "/sdcard/";
+    char filepath[64];
+    // Copy mount_point to filepath
+    strcpy(filepath, MOUNT_POINT);
+    strcat(filepath, "/");
     strcat(filepath, filename);
     if (mounted_card == NULL) {
         ESP_LOGE(TAG, "Card not mounted");
@@ -117,7 +109,7 @@ bool file_manage_write_image(
 
 void file_manager_explorer(void) {
     #ifdef CONFIG_FILE_MANAGE_ENABLE_EXPLORER
-    file_explorer_init(mounted_card);
+    file_explorer_init(mounted_card, MOUNT_POINT);
     file_explorer_run();
     #endif
 }
